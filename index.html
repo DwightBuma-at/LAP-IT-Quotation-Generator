@@ -36,12 +36,26 @@
             margin-bottom: 30px;
         }
         .btn-large {
-            background: linear-gradient(90deg, #1a5276 60%, #2980b9 100%);
+            background: #fff;
+            color: #1a5276;
             font-weight: 600;
             font-size: 1.2rem;
             border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(26,82,118,0.08);
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            border: 2px solid #1a5276;
+            box-shadow: none;
+            transition: background 0.25s, color 0.25s, transform 0.25s, box-shadow 0.25s;
+            outline: none;
+        }
+        .btn-large.employee-btn {
+            margin-bottom: 10px;
+        }
+        .btn-large.employee-btn:hover, .btn-large.employee-btn:focus {
+            background: #e3f2fd;
+            color: #1565c0;
+            transform: scale(1.04);
+            box-shadow: 0 4px 16px rgba(26,82,118,0.10);
+            border-color: #1565c0;
+        }
         }
         .btn-large:hover {
             background: #1a5276;
@@ -60,13 +74,59 @@
                         <img src="LOGO1.png" alt="LAP I.T. Solutions Logo" class="brand-logo">
                         <div class="corporate-title">LAP I.T. Solutions</div>
                         <div class="corporate-desc">Welcome to the Quotation Automation System.<br>Click below to generate a new quotation.</div>
-                        <a href="quotation.html" class="btn btn-large waves-effect waves-light">Generate Quotation</a>
+                        <a href="#employeeModal" class="btn btn-large waves-effect waves-light modal-trigger">Generate Quotation</a>
                     </div>
+                        <!-- Employee Selection Modal -->
+                        <div id="employeeModal" class="modal">
+                            <div class="modal-content">
+                                <h5 class="center-align">Select Employee to Make Quotation</h5>
+                                <p class="center-align">Who will make this quotation?</p>
+                                <div class="row" style="margin-top: 30px;">
+                                    <div class="col s12 m4 center-align">
+                                        <button class="btn-large employee-btn" style="width:100%; margin-bottom: 10px;" data-name="Ma'am Chariz" data-id="2025-001">
+                                            <i class="material-icons left">person</i>Ma'am Chariz<br><span style="font-size:0.9em; color:#888;">001</span>
+                                        </button>
+                                    </div>
+                                    <div class="col s12 m4 center-align">
+                                        <button class="btn-large employee-btn" style="width:100%; margin-bottom: 10px;" data-name="Sir Jonas" data-id="2025-002">
+                                            <i class="material-icons left">person</i>Sir Jonas<br><span style="font-size:0.9em; color:#888;">002</span>
+                                        </button>
+                                    </div>
+                                    <div class="col s12 m4 center-align">
+                                        <button class="btn-large employee-btn" style="width:100%; margin-bottom: 10px;" data-name="Ferdinand" data-id="2025-003">
+                                            <i class="material-icons left">person</i>Ferdinand<br><span style="font-size:0.9em; color:#888;">003</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="#!" class="modal-close btn-flat">Cancel</a>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- Materialize JS CDN -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var modals = document.querySelectorAll('.modal');
+        M.Modal.init(modals);
+        // Handle employee button click
+        document.querySelectorAll('.employee-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var empName = this.getAttribute('data-name');
+                var empId = this.getAttribute('data-id');
+                // Store in localStorage for use in quotation.html
+                localStorage.setItem('selectedEmployeeName', empName);
+                localStorage.setItem('selectedEmployeeId', empId);
+                // Redirect to quotation.html
+                window.location.href = 'quotation.html';
+            });
+        });
+    });
+    </script>
 </body>
 </html>
