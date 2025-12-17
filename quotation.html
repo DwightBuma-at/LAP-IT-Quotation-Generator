@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotation - LAP I.T. Solutions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            font-size: 11px;
+            line-height: 1.5;
+            color: #000;
+            background-color: #f5f5f5;
+            font-weight: 500;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .page {
+            width: 8.5in;
+            min-height: 11in;
+            margin: 20px auto;
+            background: white;
+            padding: 0.4in 0.5in;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+        }
+        
+        .company-info {
+            flex: 1;
+        }
+        
+        .company-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1a5276;
+            margin-bottom: 3px;
+        }
+        
+        .company-contact {
+            font-size: 9px;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .quotation-title {
+            text-align: right;
+        }
+        
+        .quotation-title h1 {
+            font-size: 26px;
+            color: #1a5276;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* Info Sections */
+        .info-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+        
+        .client-info, .quote-info {
+            flex: 1;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .info-title {
+            font-weight: bold;
+            color: #1a5276;
+            margin-bottom: 8px;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        
+        .info-row {
+            display: flex;
+            margin-bottom: 3px;
+        }
+        
+        .info-label {
+            font-weight: 700;
+            width: 110px;
+            color: #000;
+        }
+        
+        .info-value {
+            color: #333;
+        }
+        
+        /* Package Title */
+        .package-title {
+            background: #1a5276;
+            color: white;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin: 15px 0 0 0;
+            text-transform: uppercase;
+        }
+        
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+        
+        table th {
+            background: #d6e6f0;
+            color: #000;
+            padding: 10px 8px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid #ccc;
+        }
+        
+        table th:nth-child(1) { width: 90px; }
+        table th:nth-child(2) { width: 40px; text-align: center; }
+        table th:nth-child(3) { width: 50px; text-align: center; }
+        table th:nth-child(5) { width: 80px; text-align: right; }
+        table th:nth-child(6) { width: 80px; text-align: right; }
+        
+        table td {
+            padding: 8px;
+            border: 1px solid #ccc;
+            vertical-align: top;
+            font-size: 10px;
+        }
+        
+        table td:nth-child(2),
+        table td:nth-child(3) {
+            text-align: center;
+        }
+        
+        table td:nth-child(5),
+        table td:nth-child(6) {
+            text-align: right;
+        }
+        
+        table tfoot td {
+            border: 1px solid #ccc;
+        }
+        
+        .item-name {
+            font-weight: 600;
+            color: #1a5276;
+        }
+        
+        .item-description {
+            font-size: 10px;
+            color: #555;
+            margin-top: 2px;
+        }
+        
+        .feature-list {
+            margin: 5px 0 0 15px;
+            font-size: 9px;
+            color: #333;
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .feature-list li {
+            margin-bottom: 2px;
+        }
+        
+        .spec-list {
+            margin: 5px 0 0 15px;
+            font-size: 9px;
+            color: #666;
+        }
+        
+        .spec-list li {
+            margin-bottom: 2px;
+        }
+        
+        .modules-badge {
+            background: #17a2b8;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 8px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 3px;
+        }
+        
+        .free-badge {
+            background: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: bold;
+        }
+        
+        /* Service Section */
+        .service-section {
+            background: #e8f4f8;
+            padding: 10px 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            border-left: 3px solid #17a2b8;
+            font-size: 10px;
+        }
+        
+        .service-title {
+            font-weight: bold;
+            color: #17a2b8;
+            margin-bottom: 3px;
+        }
+        
+        /* Pricing Section */
+        .pricing-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+        
+        .pricing-table {
+            width: 280px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .pricing-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 12px;
+            border-bottom: 1px solid #ddd;
+            font-size: 10px;
+        }
+        
+        .pricing-row:last-child {
+            border-bottom: none;
+        }
+        
+        .pricing-row.total {
+            background: #1a5276;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        /* Payment Terms */
+        .payment-terms {
+            background: #fff3cd;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            border-left: 3px solid #ffc107;
+        }
+        
+        .payment-terms h3 {
+            color: #856404;
+            margin-bottom: 8px;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        
+        .payment-terms ol {
+            margin-left: 18px;
+            font-size: 10px;
+        }
+        
+        .payment-terms li {
+            margin-bottom: 4px;
+            color: #666;
+        }
+        
+        .payment-amount {
+            font-weight: bold;
+            color: #1a5276;
+        }
+        
+        /* Terms and Conditions */
+        .terms-section {
+            background: white;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        
+        .terms-section h3 {
+            color: #000;
+            margin-bottom: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        
+        .terms-list {
+            font-size: 10px;
+            color: #000;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+        
+        .terms-list > li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        
+        .exclusions-list {
+            margin: 5px 0 0 20px;
+            font-size: 10px;
+        }
+        
+        .exclusions-list li {
+            margin-bottom: 3px;
+        }
+        
+        /* Support Section */
+        .support-section {
+            background: #d4edda;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            border-left: 3px solid #28a745;
+        }
+        
+        .support-section h3 {
+            color: #155724;
+            margin-bottom: 8px;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        
+        .support-content {
+            font-size: 10px;
+            color: #555;
+        }
+        
+        .support-content p {
+            margin-bottom: 5px;
+        }
+        
+        .support-methods {
+            margin: 5px 0 5px 20px;
+        }
+        
+        .support-methods li {
+            margin-bottom: 2px;
+        }
+        
+        /* Footer / Signature */
+        .contract-statement {
+            text-align: center;
+            font-size: 10px;
+            color: #555;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 40px;
+        }
+        
+        .signature-box {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .signature-line {
+            border-top: 1px solid #333;
+            margin-top: 40px;
+            padding-top: 5px;
+        }
+        
+        .signature-label {
+            font-size: 10px;
+            color: #555;
+        }
+        
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 9px;
+            color: #888;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+        
+        @media print {
+            body, html {
+                background: #fff !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .page {
+                page-break-after: always;
+                box-shadow: none !important;
+                margin: 0 !important;
+                width: 8.5in !important;
+                min-height: 11in !important;
+                padding: 0.4in 0.5in !important;
+            }
+            table {
+                page-break-inside: avoid;
+                width: 100% !important;
+            }
+            select, input {
+                box-shadow: none !important;
+                outline: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="pdf-content">
+        <!-- PAGE 1 -->
+        <div class="page">
+            <!-- Header -->
+            <div class="header" style="align-items: flex-start;">
+                <div style="display: flex; flex-direction: column; align-items: center; margin-right: 15px; width: 130px; flex-shrink: 0;">
+                    <img src="LOGO1.png" alt="LAP I.T. Solutions Logo" style="height: 130px; width: 130px; object-fit: contain;">
+                </div>
+                <div class="company-info" style="display: flex; align-items: flex-start; padding-top: 38px;">
+                    <div class="company-contact" style="line-height: 1.4; font-family: 'Arial', sans-serif; font-size: 10px; font-weight: normal; color: #000;">
+                        <div>Door B-3 Marcela Building 11-A, J.Palma Gil Street, Davao<br>City, Philippines, 8000</div>
+                        <div>Landline: (082) 296-0363  Mobile: 0905-5565713</div>
+                        <div>Email: lapitsolutionsincorporated@gmail.com</div>
+                    </div>
+                </div>
+                <div class="quotation-title">
+                    <h1></h1>
+                </div>
+            </div>
+            
+            <!-- Client & Quotation Info -->
+            <div class="info-section">
+                <div class="client-info">
+                    <div class="info-row">
+                        <span class="info-label">To:</span>
+                        <input type="text" class="info-value border border-gray-300 rounded px-2 py-1" style="width: 180px;" placeholder="Enter recipient name">
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Office Address:</span>
+                        <input type="text" class="info-value border border-gray-300 rounded px-2 py-1" style="width: 180px;" placeholder="Enter office address">
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Contact Person:</span>
+                        <input type="text" class="info-value border border-gray-300 rounded px-2 py-1" style="width: 180px;" placeholder="Enter contact person">
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Contact No:</span>
+                        <input type="text" class="info-value border border-gray-300 rounded px-2 py-1" style="width: 180px;" placeholder="Enter contact number">
+                    </div>
+                </div>
+                <div class="quote-info" style="text-align: right;">
+                    <div style="font-size: 14px; font-weight: bold; color: #1a5276; font-family: 'Arial', sans-serif;">
+                        <div>QUOTATION NO.: <span id="quote-number"></span></div>
+                        <div>DATE: <span id="quote-date"></span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Items Table -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Qty.</th>
+                        <th>Unit</th>
+                        <th>Description</th>
+                        <th>Price (Php)</th>
+                        <th>Total (Php)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="2" style="vertical-align: top; font-weight: bold; min-width: 180px;">
+                            <select id="packageType" style="font-weight: bold; font-size: 10px; padding: 5px; border: 1px solid #ccc; border-radius: 3px; width: 180px; cursor: pointer;">
+                                <option value="POS COMPLETE PACKAGE">POS COMPLETE PACKAGE</option>
+                                <option value="POS SOFTWARE ONLY">POS SOFTWARE ONLY</option>
+                                <option value="POS SOFTWARE + HARDWARES">POS SOFTWARE + HARDWARES</option>
+                            </select>
+                        </td>
+                        <td><input type="number" value="0" min="0" style="width: 50px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
+                        <td><select style="font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">
+                            <option value="License">License</option>
+                            <option value="PC">PC</option>
+                            <option value="Set">Set</option>
+                        </select></td>
+                        <td>
+                            <div class="item-name">MyDiner Point Of Sale &amp; Inventory System (BIR Ready)</div>
+                            <div style="font-weight: bold; margin: 5px 0;">BACK OFFICE | CASHIER STATION</div>
+                            <ul class="feature-list">
+                                <li>✓ Point of Sale System</li>
+                                <li>✓ Full cashiering process</li>
+                                <li>✓ Closed shift report</li>
+                                <li>✓ End of day report</li>
+                                <li>✓ Top item sales, cashier &amp; item summary</li>
+                                <li>✓ Discount type such as senior citizen, PWD, etc.</li>
+                                <li>✓ Void receipt</li>
+                                <li>✓ Cancel transaction</li>
+                                <li>✓ Transfer table</li>
+                            </ul>
+                        </td>
+                        <td><input type="text" class="price-input" value="" style="width: 80px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
+                        <td class="total-cell"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="number" value="0" min="0" style="width: 50px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
+                        <td><select style="font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">
+                            <option value="License">License</option>
+                            <option value="PC">PC</option>
+                            <option value="Set" selected>Set</option>
+                        </select></td>
+                        <td>
+                            <div class="item-name">Computer Set – Cashier Station</div>
+                            <div style="padding-left: 20px; margin-top: 5px;">
+                                15" Touchscreen Monitor<br>
+                                Dual Core Processor (or equivalent)<br>
+                                256GB SSD SATA<br>
+                                256GB SSD SATA<br>
+                                8GB Memory<br>
+                                Keyboard<br>
+                                Mouse &amp; Mouse Pad<br>
+                                Small factor casing w/ power supply
+                            </div>
+                        </td>
+                        <td><input type="text" class="price-input" value="" style="width: 80px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
+                        <td class="total-cell"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="number" value="0" min="0" style="width: 50px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
+                        <td><select style="font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">
+                            <option value="License">License</option>
+                            <option value="PC" selected>PC</option>
+                            <option value="Set">Set</option>
+                        </select></td>
+                        <td><div class="item-name">Cash Drawer</div></td>
+                        <td><input type="text" class="price-input" value="" style="width: 80px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
+                        <td class="total-cell"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="number" value="0" min="0" style="width: 50px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
+                        <td><select style="font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">
+                            <option value="License">License</option>
+                            <option value="PC" selected>PC</option>
+                            <option value="Set">Set</option>
+                        </select></td>
+                        <td><div class="item-name">Thermal Printer</div></td>
+                        <td><input type="text" class="price-input" value="" style="width: 80px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
+                        <td class="total-cell"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>1</td>
+                        <td><select style="font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">
+                            <option value="License">License</option>
+                            <option value="PC" selected>PC</option>
+                            <option value="Set">Set</option>
+                        </select></td>
+                        <td><div class="item-name">650VA UPS</div></td>
+                        <td><input type="text" class="price-input" value="" style="width: 80px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
+                        <td class="total-cell"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="number" value="5" min="0" style="width: 50px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
+                        <td><select style="font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">
+                            <option value="License">License</option>
+                            <option value="PC" selected>PC</option>
+                            <option value="Set">Set</option>
+                        </select></td>
+                        <td><div class="item-name">Thermal Paper</div></td>
+                        <td><input type="text" class="price-input" value="FREE" style="width: 80px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
+                        <td class="total-cell">FREE</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <div style="font-style: italic;">
+                                <strong>Delivery, setup, installation, and training;</strong><br>
+                                <strong>Guaranteed (1) year technical support</strong><br>
+                                Via text, call and remote access
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr style="background: #d6e6f0;">
+                        <td colspan="5" style="text-align: right; font-weight: bold; padding: 10px;">Subtotal</td>
+                        <td id="subtotal-cell" style="text-align: right; font-weight: bold; padding: 10px;">₱0.00</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" style="text-align: right; font-weight: bold; padding: 10px;">On site delivery &amp; training (optional)</td>
+                        <td style="text-align: right; font-weight: bold; padding: 10px;">FREE</td>
+                    </tr>
+                    <tr style="background: #d6e6f0;">
+                        <td colspan="5" style="text-align: right; font-weight: bold; padding: 10px;">Discounted Package Price</td>
+                        <td style="text-align: right; font-weight: bold; padding: 10px;">₱96,000.00</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        
+        <!-- PAGE 2 -->
+        <div class="page page-break">
+            <!-- Terms and Conditions -->
+            <div class="terms-section">
+                <h3 style="font-weight: bold; margin-bottom: 12px; font-size: 13px; color: #000;">Terms and Conditions:</h3>
+                <ol class="terms-list" style="margin-left: 25px; font-size: 11px; color: #000; font-weight: 500;">
+                    <li style="margin-bottom: 3px;">Payment Terms:
+                        <div style="margin-left: 40px; margin-top: 3px;">
+                            <strong>₱35,000</strong> down payment (non refundable) upon confirmation of order<br>
+                            <strong>₱35,000</strong> upon delivery and completion<br>
+                            <strong>₱26,000</strong> upon delivery and completion (30 days PDC)
+                        </div>
+                        <div style="margin-left: 15px; margin-top: 5px;">
+                            For check payments, please make check payable to <strong><em>LAP I.T. SOLUTIONS</em></strong>
+                        </div>
+                    </li>
+                    <li style="margin-bottom: 3px;">All prices quoted are valid for 7 days from the date of quotation.</li>
+                    <li style="margin-bottom: 3px;">Grand Total is <strong>VAT exclusive.</strong></li>
+                    <li style="margin-bottom: 3px;">Initial, partial and down payments are considered binding and non-refundable.</li>
+                    <li style="margin-bottom: 3px;">For Davao City clients, delivery of goods and services will be 3 to 5 days upon date of down payment.</li>
+                    <li style="margin-bottom: 3px;">For clients outside Davao City, delivery of goods and services will be 5 to 7 days upon date of down payment. Delivery and other related expenses will be shouldered by the client.</li>
+                    <li style="margin-bottom: 3px;">Internet Connection is required for license activation and online support purposes.</li>
+                    <li style="margin-bottom: 3px;">Any fortuitous event may void the warranty. However, certain consideration will be given to the client.</li>
+                    <li style="margin-bottom: 3px;">Any form of hacking or cracking of our software may void the contract.</li>
+                    <li style="margin-bottom: 3px;">If within Davao City, on site visit will be conducted 1 to 3 business days upon request.</li>
+                    <li style="margin-bottom: 3px;">If outside Davao City, on site visit will be 3 to 10 business days upon request and all expenses such as transportation, accommodation and other related cost must be shouldered by the client.</li>
+                    <li style="margin-bottom: 3px;">LAP I.T. Solutions may ask the client to provide some documents (hard or soft copy) to complete the implementation.</li>
+                    <li style="margin-bottom: 3px;">Customization and system enhancement is not included in the quotation therefore, charges may apply.</li>
+                    <li style="margin-bottom: 3px;">The aforementioned POS package is covered by hardware warranty for a period of twelve (12) months from date of delivery. The provision of this warranty and maintenance shall not cover direct or indirect loss of the unit resulting from any of the following:
+                        <div style="margin-left: 40px; margin-top: 5px;">
+                            14.1 Normal wear and tear, improper use of the unit and in-adherence to prescribed<br>
+                            <span style="margin-left: 28px;">instructions for normal operation and maintenance of the unit;</span><br>
+                            14.2 Faulty electrical wiring and improper grounding within the buyer's premises;<br>
+                            14.3 Power fluctuation, operating the unit outside its required power input;<br>
+                            14.4 Negligence, tampering and/or unauthorized repair of the unit;<br>
+                            14.5 Lightning, flood, fire, accident or other fortuitous events;<br>
+                            14.6 Unauthorized installation;<br>
+                            14.7 Tampering or removing of sticker, altered or obliterated.
+                        </div>
+                    </li>
+                </ol>
+                
+                <p style="font-weight: bold; margin-top: 15px; margin-bottom: 8px; font-size: 11px; color: #000;">Support & Warranty:</p>
+                <ul style="margin-left: 25px; font-size: 11px; color: #000; list-style-type: circle; font-weight: 500;">
+                    <li style="margin-bottom: 8px;">Guaranteed Technical support for 12 months via text message, voice call, email, chat via messenger and online support via anydesk or teamviewer.</li>
+                    <li style="margin-bottom: 8px;">After one (1) year, client is encourage to pay ₱1,000/month for continued technical support</li>
+                    <li style="margin-bottom: 8px;">Software use is covered by Service License Agreement (SLA) and End User License Agreement (EULA).</li>
+                </ul>
+                
+                <p style="margin-top: 15px; font-size: 11px; color: #000; font-weight: 500;">Our warranty is absolutely limited to the specified parts and services mentioned above.</p>
+                
+                <p style="margin-top: 15px; font-size: 11px; color: #000; font-weight: 500;">This document serves as a contract agreement as well as acknowledgement receipt. If all is in order, kindly sign Below.</p>
+            </div>
+            
+            <!-- Signature Section -->
+            <div class="signature-section" style="margin-top: 25px;">
+                <div style="display: flex; align-items: flex-end;">
+                    <p style="font-weight: bold; font-size: 11px; color: #000; margin: 0; margin-right: 15px; padding-bottom: 20px;">CONFORME:</p>
+                    <div>
+                        <div style="width: 200px; border-bottom: 1px solid #000; margin-bottom: 3px;"></div>
+                        <div style="font-size: 10px; color: #000; text-align: center;">Signature over Printed Name</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
