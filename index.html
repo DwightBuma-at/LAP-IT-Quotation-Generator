@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quotation Automation - Home</title>
+    {% load static %}
     <!-- Materialize CSS CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <style>
@@ -109,7 +110,7 @@
             <div class="col s12 m8 offset-m2 l6 offset-l3">
                 <div class="card z-depth-2">
                     <div class="card-content">
-                        <img src="LOGO1.png" alt="LAP I.T. Solutions Logo" class="brand-logo">
+                        <img src="{% static 'LOGO1.png' %}" alt="LAP I.T. Solutions Logo" class="brand-logo">
                         <div class="corporate-title">LAP I.T. Solutions</div>
                         <div class="corporate-desc">Welcome to the Quotation Automation System.<br>Click below to generate a new quotation.</div>
                         <a href="#employeeModal" class="btn btn-large waves-effect waves-light modal-trigger">Generate Quotation</a>
@@ -156,7 +157,7 @@
                                                 <div id="passwordError" style="color: red; display: none; text-align: center;">Incorrect password. Please try again.</div>
                                             </div>
                                             <div class="modal-footer">
-                                                <a href="#!" id="passwordCancel" class="modal-close btn-flat">Cancel</a>
+                                                <a href="#!" id="passwordCancel" class="btn-flat">Cancel</a>
                                                 <a href="#!" id="passwordSubmit" class="btn blue">Submit</a>
                                             </div>
                                         </div>

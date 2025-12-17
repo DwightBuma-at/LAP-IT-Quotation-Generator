@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quotation - LAP I.T. Solutions</title>
+        <title>Quotation - LAP I.T. Solutions</title>
+        {% load static %}
     <style>
         * {
             margin: 0;
@@ -434,13 +435,30 @@
     </style>
 </head>
 <body>
-    <div id="pdf-content">
+    <div id="login-section" style="max-width: 350px; margin: 40px auto 20px auto; padding: 24px 28px; background: #fff; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+        <h2 style="color: #1976d2; text-align: center; margin-bottom: 18px; font-size: 22px;">User Login</h2>
+        <label for="user-select" style="font-weight: bold; color: #1976d2;">User:</label>
+        <select id="user-select" style="width: 100%; padding: 8px 12px; font-size: 15px; border-radius: 4px; border: 1px solid #1976d2; margin-bottom: 14px;">
+            <option value="001">Ma'am Charisse</option>
+            <option value="002">Sir Jude</option>
+            <option value="003">Sir Gab</option>
+            <option value="004">Ma'am Cheryl</option>
+            <option value="005">Sir Julius</option>
+        </select>
+        <label for="user-password" style="font-weight: bold; color: #1976d2;">Password:</label>
+        <input type="password" id="user-password" style="width: 100%; padding: 8px 12px; font-size: 15px; border-radius: 4px; border: 1px solid #1976d2; margin-bottom: 18px;">
+        <button id="login-btn" style="width: 100%; background: #1976d2; color: #fff; border: none; border-radius: 4px; padding: 10px 0; font-size: 16px; font-weight: bold; cursor: pointer;">Login</button>
+        <div id="login-error" style="color: #c00; margin-top: 10px; text-align: center; display: none;">Invalid password. Please try again.</div>
+    </div>
+    <div id="quotation-section" style="display: none;">
+        <button id="download-pdf" style="margin: 20px auto 10px 20px; display: block; background: #1976d2; color: #fff; border: none; border-radius: 4px; padding: 10px 24px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">Download into PDF</button>
+        <div id="pdf-content">
         <!-- PAGE 1 -->
         <div class="page">
             <!-- Header -->
             <div class="header" style="align-items: flex-start;">
                 <div style="display: flex; flex-direction: column; align-items: center; margin-right: 15px; width: 130px; flex-shrink: 0;">
-                    <img src="LOGO1.png" alt="LAP I.T. Solutions Logo" style="height: 130px; width: 130px; object-fit: contain;">
+                    <img src="{% static 'LOGO1.png' %}" alt="LAP I.T. Solutions Logo" style="height: 130px; width: 130px; object-fit: contain;">
                 </div>
                 <div class="company-info" style="display: flex; align-items: flex-start; padding-top: 38px;">
                     <div class="company-contact" style="line-height: 1.4; font-family: 'Arial', sans-serif; font-size: 10px; font-weight: normal; color: #000;">
@@ -737,5 +755,71 @@
     </div>
 
 </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+    // Passwords for each user (should match your backend Employee table)
+    const USER_PASSWORDS = {
+        '001': 'charisse123',
+        '002': 'jude123',
+        '003': 'gab123',
+        '004': 'cheryl123',
+        '005': 'julius123'
+    };
+    let CURRENT_EMP_ID = null;
+
+    document.getElementById('login-btn').onclick = function() {
+        const empId = document.getElementById('user-select').value;
+        const password = document.getElementById('user-password').value;
+        if (USER_PASSWORDS[empId] && USER_PASSWORDS[empId] === password) {
+            CURRENT_EMP_ID = empId;
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('quotation-section').style.display = '';
+            document.getElementById('login-error').style.display = 'none';
+        } else {
+            document.getElementById('login-error').style.display = '';
+        }
+    };
+
+    document.getElementById('download-pdf').addEventListener('click', function () {
+        // Auto-fill the DATE field with today's date (MM/DD/YYYY)
+        var today = new Date();
+        var yyyy = today.getFullYear();
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var dd = String(today.getDate()).padStart(2, '0');
+        var formatted = mm + '/' + dd + '/' + yyyy;
+        var dateSpan = document.getElementById('quote-date');
+        if (dateSpan) dateSpan.textContent = formatted;
+
+        // Fetch the quotation number from the backend
+        fetch('/api/create-quotation/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ emp_id: CURRENT_EMP_ID })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.quotation_no) {
+                var quoteNoSpan = document.getElementById('quote-number');
+                if (quoteNoSpan) quoteNoSpan.textContent = data.quotation_no;
+            }
+            // Wait a moment for DOM update, then generate PDF
+            setTimeout(function() {
+                var element = document.getElementById('pdf-content');
+                var opt = {
+                    margin:       0,
+                    filename:     'quotation.pdf',
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2, useCORS: true },
+                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' },
+                    pagebreak:    { mode: ['css', 'legacy'] }
+                };
+                html2pdf().set(opt).from(element).save();
+            }, 200);
+        })
+        .catch(err => {
+            alert('Failed to generate quotation number. Please try again.');
+        });
+    });
+    </script>
 </body>
 </html>
