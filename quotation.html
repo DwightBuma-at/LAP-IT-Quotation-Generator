@@ -497,32 +497,24 @@
                 <tbody>
                     <tr>
                         <td rowspan="2" style="vertical-align: top; font-weight: bold; min-width: 180px;">
-                            <select id="packageType" style="font-weight: bold; font-size: 10px; padding: 5px; border: 1px solid #ccc; border-radius: 3px; width: 180px; cursor: pointer;">
-                                <option value="POS COMPLETE PACKAGE">POS COMPLETE PACKAGE</option>
+                            <select id="packageType" style="font-weight: bold; font-size: 9px; padding: 5px; border: 1px solid #ccc; border-radius: 3px; min-width: 180px; width: auto; max-width: 100%; cursor: pointer;">
+                                <option value="STANDARD POS RETAIL PACKAGES">STANDARD POS RETAIL PACKAGES</option>
+                                <option value="STANDARD POS RESTAURANT PACKAGE">STANDARD POS RESTAURANT PACKAGE</option>
+                                <option value="BASIC POS FASTFOOD PACKAGE">BASIC POS FASTFOOD PACKAGE</option>
+                                <option value="BASIC POS RETAIL PACKAGE">BASIC POS RETAIL PACKAGE</option>
                                 <option value="POS SOFTWARE ONLY">POS SOFTWARE ONLY</option>
-                                <option value="POS SOFTWARE + HARDWARES">POS SOFTWARE + HARDWARES</option>
+                                <option value="CUSTOMIZED">CUSTOMIZED</option>
                             </select>
                         </td>
                         <td><input type="number" value="0" min="0" style="width: 50px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
                         <td><select style="font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">
+                            <option value="" selected disabled>Select</option>
                             <option value="License">License</option>
                             <option value="PC">PC</option>
                             <option value="Set">Set</option>
                         </select></td>
                         <td>
                             <div class="item-name">MyDiner Point Of Sale &amp; Inventory System (BIR Ready)</div>
-                            <div style="font-weight: bold; margin: 5px 0;">BACK OFFICE | CASHIER STATION</div>
-                            <ul class="feature-list">
-                                <li>✓ Point of Sale System</li>
-                                <li>✓ Full cashiering process</li>
-                                <li>✓ Closed shift report</li>
-                                <li>✓ End of day report</li>
-                                <li>✓ Top item sales, cashier &amp; item summary</li>
-                                <li>✓ Discount type such as senior citizen, PWD, etc.</li>
-                                <li>✓ Void receipt</li>
-                                <li>✓ Cancel transaction</li>
-                                <li>✓ Transfer table</li>
-                            </ul>
                         </td>
                         <td><input type="text" class="price-input" value="" style="width: 80px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
                         <td class="total-cell"></td>
@@ -530,22 +522,13 @@
                     <tr>
                         <td><input type="number" value="0" min="0" style="width: 50px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
                         <td><select style="font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">
+                            <option value="" selected disabled>Select</option>
                             <option value="License">License</option>
                             <option value="PC">PC</option>
-                            <option value="Set" selected>Set</option>
+                            <option value="Set">Set</option>
                         </select></td>
                         <td>
-                            <div class="item-name">Computer Set – Cashier Station</div>
-                            <div style="padding-left: 20px; margin-top: 5px;">
-                                15" Touchscreen Monitor<br>
-                                Dual Core Processor (or equivalent)<br>
-                                256GB SSD SATA<br>
-                                256GB SSD SATA<br>
-                                8GB Memory<br>
-                                Keyboard<br>
-                                Mouse &amp; Mouse Pad<br>
-                                Small factor casing w/ power supply
-                            </div>
+                            <div class="item-name" style="text-align: left;">Computer Set – Cashier Station</div>
                         </td>
                         <td><input type="text" class="price-input" value="" style="width: 80px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
                         <td class="total-cell"></td>
@@ -554,8 +537,9 @@
                         <td></td>
                         <td><input type="number" value="0" min="0" style="width: 50px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
                         <td><select style="font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">
+                            <option value="" selected disabled>Select</option>
                             <option value="License">License</option>
-                            <option value="PC" selected>PC</option>
+                            <option value="PC">PC</option>
                             <option value="Set">Set</option>
                         </select></td>
                         <td><div class="item-name">Cash Drawer</div></td>
@@ -566,8 +550,9 @@
                         <td></td>
                         <td><input type="number" value="0" min="0" style="width: 50px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
                         <td><select style="font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">
+                            <option value="" selected disabled>Select</option>
                             <option value="License">License</option>
-                            <option value="PC" selected>PC</option>
+                            <option value="PC">PC</option>
                             <option value="Set">Set</option>
                         </select></td>
                         <td><div class="item-name">Thermal Printer</div></td>
@@ -576,10 +561,11 @@
                     </tr>
                     <tr>
                         <td></td>
-                        <td>1</td>
+                        <td><input type="number" value="0" min="0" style="width: 50px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
                         <td><select style="font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">
+                            <option value="" selected disabled>Select</option>
                             <option value="License">License</option>
-                            <option value="PC" selected>PC</option>
+                            <option value="PC">PC</option>
                             <option value="Set">Set</option>
                         </select></td>
                         <td><div class="item-name">650VA UPS</div></td>
@@ -588,10 +574,11 @@
                     </tr>
                     <tr>
                         <td></td>
-                        <td><input type="number" value="5" min="0" style="width: 50px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
+                        <td><input type="number" value="0" min="0" style="width: 50px; font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right;"></td>
                         <td><select style="font-size: 10px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">
+                            <option value="" selected disabled>Select</option>
                             <option value="License">License</option>
-                            <option value="PC" selected>PC</option>
+                            <option value="PC">PC</option>
                             <option value="Set">Set</option>
                         </select></td>
                         <td><div class="item-name">Thermal Paper</div></td>
@@ -628,6 +615,28 @@
                     </tr>
                 </tfoot>
             </table>
+            <script>
+            // Auto-fill description based on package type
+            document.addEventListener('DOMContentLoaded', function() {
+                var typeSelect = document.getElementById('packageType');
+                var descriptionInputs = document.querySelectorAll('td:nth-child(4) .item-name');
+                var descriptionDetails = {
+                    'POS COMPLETE PACKAGE': 'POS COMPLETE PACKAGE DESCRIPTION AND DETAILS',
+                    'POS SOFTWARE ONLY': 'POS SOFTWARE ONLY DESCRIPTION AND DETAILS',
+                    'POS SOFTWARE + HARDWARE': 'POS SOFTWARE + HARDWARE DESCRIPTION AND DETAILS'
+                };
+                if(typeSelect) {
+                    typeSelect.addEventListener('change', function() {
+                        var val = typeSelect.value;
+                        // Find the first .item-name in the description column and update it
+                        var descDiv = document.querySelector('td:nth-child(4) .item-name');
+                        if(descDiv && descriptionDetails[val]) {
+                            descDiv.textContent = descriptionDetails[val];
+                        }
+                    });
+                }
+            });
+            </script>
         </div>
         
         <!-- PAGE 2 -->
