@@ -452,22 +452,7 @@
     </style>
 </head>
 <body>
-    <div id="login-section" style="max-width: 350px; margin: 40px auto 20px auto; padding: 24px 28px; background: #fff; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
-        <h2 style="color: #1976d2; text-align: center; margin-bottom: 18px; font-size: 22px;">User Login</h2>
-        <label for="user-select" style="font-weight: bold; color: #1976d2;">User:</label>
-        <select id="user-select" style="width: 100%; padding: 8px 12px; font-size: 15px; border-radius: 4px; border: 1px solid #1976d2; margin-bottom: 14px;">
-            <option value="001">Ma'am Charisse</option>
-            <option value="002">Sir Jude</option>
-            <option value="003">Sir Gab</option>
-            <option value="004">Ma'am Cheryl</option>
-            <option value="005">Sir Julius</option>
-        </select>
-        <label for="user-password" style="font-weight: bold; color: #1976d2;">Password:</label>
-        <input type="password" id="user-password" style="width: 100%; padding: 8px 12px; font-size: 15px; border-radius: 4px; border: 1px solid #1976d2; margin-bottom: 18px;">
-        <button id="login-btn" style="width: 100%; background: #1976d2; color: #fff; border: none; border-radius: 4px; padding: 10px 0; font-size: 16px; font-weight: bold; cursor: pointer;">Login</button>
-        <div id="login-error" style="color: #c00; margin-top: 10px; text-align: center; display: none;">Invalid password. Please try again.</div>
-    </div>
-    <div id="quotation-section" style="display: none;">
+    <div id="quotation-section">
         <div style="display:flex; gap:10px; align-items:center; margin:20px 0 10px 20px;">
             <button id="preview-btn" style="background: #0288d1; color: #fff; border: none; border-radius: 4px; padding: 10px 18px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">Download as PDF</button>
         </div>
@@ -790,28 +775,8 @@
 </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
-    // Passwords for each user (should match your backend Employee table)
-    const USER_PASSWORDS = {
-        '001': 'charisse123',
-        '002': 'jude123',
-        '003': 'gab123',
-        '004': 'cheryl123',
-        '005': 'julius123'
-    };
-    let CURRENT_EMP_ID = null;
-
-    document.getElementById('login-btn').onclick = function() {
-        const empId = document.getElementById('user-select').value;
-        const password = document.getElementById('user-password').value;
-        if (USER_PASSWORDS[empId] && USER_PASSWORDS[empId] === password) {
-            CURRENT_EMP_ID = empId;
-            document.getElementById('login-section').style.display = 'none';
-            document.getElementById('quotation-section').style.display = '';
-            document.getElementById('login-error').style.display = 'none';
-        } else {
-            document.getElementById('login-error').style.display = '';
-        }
-    };
+    // Get employee ID from localStorage (set by index.html)
+    let CURRENT_EMP_ID = localStorage.getItem('selectedEmployeeId');
 
     function cloneForPrint(element) {
         const clone = element.cloneNode(true);
