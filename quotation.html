@@ -161,6 +161,11 @@
             text-align: right;
         }
         
+        /* Center quantity numeric inputs in table (covers rowspan rows) */
+        table td input[type="number"] {
+            text-align: center !important;
+        }
+        
         table tfoot td {
             border: 1px solid #ccc;
         }
@@ -415,6 +420,18 @@
             .no-print {
                 display: none !important;
             }
+            table th {
+                background: #d6e6f0 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            table tfoot tr {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            table tfoot tr[style*="background"] {
+                background: #d6e6f0 !important;
+            }
             .page {
                 page-break-after: always;
                 box-shadow: none !important;
@@ -451,7 +468,9 @@
         <div id="login-error" style="color: #c00; margin-top: 10px; text-align: center; display: none;">Invalid password. Please try again.</div>
     </div>
     <div id="quotation-section" style="display: none;">
-        <button id="download-pdf" style="margin: 20px auto 10px 20px; display: block; background: #1976d2; color: #fff; border: none; border-radius: 4px; padding: 10px 24px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">Download into PDF</button>
+        <div style="display:flex; gap:10px; align-items:center; margin:20px 0 10px 20px;">
+            <button id="preview-btn" style="background: #0288d1; color: #fff; border: none; border-radius: 4px; padding: 10px 18px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">Download as PDF</button>
+        </div>
         <div id="pdf-content">
         <!-- PAGE 1 -->
         <div class="page">
@@ -754,6 +773,20 @@
         </div>
     </div>
 
+    <!-- Preview overlay (hidden by default) -->
+    <div id="preview-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; overflow:auto; padding:20px;">
+        <div id="preview-container" style="background:#fff; max-width:850px; width:100%; max-height:95%; overflow:auto; border-radius:6px; padding:18px; box-shadow:0 6px 24px rgba(0,0,0,0.3);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:12px;">
+                <div style="font-weight:700; color:#1a5276;">Quotation Preview</div>
+                <div style="display:flex; gap:8px;">
+                    <button id="preview-print" style="background:#1976d2; color:#fff; border:none; border-radius:4px; padding:8px 12px; cursor:pointer;">Download PDF</button>
+                    <button id="preview-close" style="background:#666; color:#fff; border:none; border-radius:4px; padding:8px 12px; cursor:pointer;">Close</button>
+                </div>
+            </div>
+            <div id="preview-content" style="background:#fff;"></div>
+        </div>
+    </div>
+
 </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
@@ -780,8 +813,41 @@
         }
     };
 
-    document.getElementById('download-pdf').addEventListener('click', function () {
-        // Auto-fill the DATE field with today's date (MM/DD/YYYY)
+    function cloneForPrint(element) {
+        const clone = element.cloneNode(true);
+        // Replace form controls with static text
+        clone.querySelectorAll('input, textarea, select, button').forEach(el => {
+            const tag = el.tagName.toLowerCase();
+            if (tag === 'input' || tag === 'textarea') {
+                const span = document.createElement('span');
+                span.textContent = el.value || el.getAttribute('value') || '';
+                span.style.whiteSpace = 'pre-wrap';
+                // For number inputs, center align the replacement span
+                if (el.type === 'number') {
+                    span.style.textAlign = 'center';
+                    span.style.display = 'block';
+                }
+                el.parentNode.replaceChild(span, el);
+            } else if (tag === 'select') {
+                const text = (el.options && el.selectedIndex >= 0) ? (el.options[el.selectedIndex].text || '') : '';
+                const span = document.createElement('span');
+                span.textContent = text;
+                // Center align select replacements too
+                span.style.display = 'block';
+                span.style.textAlign = 'center';
+                el.parentNode.replaceChild(span, el);
+            } else if (tag === 'button') {
+                // remove buttons from printable clone
+                el.parentNode.removeChild(el);
+            }
+        });
+        // Also remove login section if accidentally cloned
+        const login = clone.querySelector('#login-section');
+        if (login) login.parentNode.removeChild(login);
+        return clone;
+    }
+
+    function setTodayDate() {
         var today = new Date();
         var yyyy = today.getFullYear();
         var mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -789,35 +855,102 @@
         var formatted = mm + '/' + dd + '/' + yyyy;
         var dateSpan = document.getElementById('quote-date');
         if (dateSpan) dateSpan.textContent = formatted;
+    }
 
-        // Fetch the quotation number from the backend
+    // Helper to request quotation number from backend
+    function requestQuotationNumber(callback) {
         fetch('/api/create-quotation/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ emp_id: CURRENT_EMP_ID })
         })
         .then(response => response.json())
-        .then(data => {
-            if (data.quotation_no) {
+        .then(data => callback(null, data))
+        .catch(err => callback(err));
+    }
+
+    // Main PDF generation used by both preview-print and direct download
+    function generatePdfFromElement(element, filename) {
+        var opt = {
+            margin:       0,
+            filename:     filename || 'quotation.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' },
+            pagebreak:    { mode: ['css', 'legacy'] }
+        };
+        return html2pdf().set(opt).from(element).save();
+    }
+
+    // Preview button behavior
+    document.getElementById('preview-btn').addEventListener('click', function () {
+        if (!CURRENT_EMP_ID) { alert('Please login first.'); return; }
+        setTodayDate();
+        requestQuotationNumber(function(err, data) {
+            if (err) { alert('Failed to get quotation number for preview.'); return; }
+            if (data && data.quotation_no) {
                 var quoteNoSpan = document.getElementById('quote-number');
                 if (quoteNoSpan) quoteNoSpan.textContent = data.quotation_no;
             }
-            // Wait a moment for DOM update, then generate PDF
-            setTimeout(function() {
-                var element = document.getElementById('pdf-content');
-                var opt = {
-                    margin:       0,
-                    filename:     'quotation.pdf',
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2, useCORS: true },
-                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' },
-                    pagebreak:    { mode: ['css', 'legacy'] }
-                };
-                html2pdf().set(opt).from(element).save();
-            }, 200);
-        })
-        .catch(err => {
-            alert('Failed to generate quotation number. Please try again.');
+            // Build printable clone and show in overlay
+            var element = document.getElementById('pdf-content');
+            var printable = cloneForPrint(element);
+            var previewContent = document.getElementById('preview-content');
+            previewContent.innerHTML = '';
+            previewContent.appendChild(printable);
+            document.getElementById('preview-overlay').style.display = 'flex';
+            // scroll to top
+            document.getElementById('preview-container').scrollTop = 0;
+        });
+    });
+
+    // Close preview
+    document.getElementById('preview-close').addEventListener('click', function() {
+        document.getElementById('preview-overlay').style.display = 'none';
+    });
+
+    // Print from preview: open browser print dialog with the preview content
+    document.getElementById('preview-print').addEventListener('click', function() {
+        var previewContent = document.getElementById('preview-content');
+        if (!previewContent.firstChild) { alert('Preview is empty.'); return; }
+        // Open a new window with the printable HTML so browser's print preview appears
+        var printWindow = window.open('', '_blank');
+        if (!printWindow) { alert('Popup blocked. Allow popups for this site to print.'); return; }
+        // Minimal styling: copy current page styles to the new window
+        var headHTML = '';
+        Array.from(document.querySelectorAll('style, link[rel="stylesheet"]')).forEach(node => {
+            headHTML += node.outerHTML;
+        });
+        printWindow.document.open();
+        printWindow.document.write('<!doctype html><html><head>' + headHTML + '<title>Quotation Preview</title></head><body>');
+        printWindow.document.write(previewContent.firstChild.outerHTML);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        // Give the window time to render resources, then call print
+        printWindow.focus();
+        setTimeout(function() {
+            printWindow.print();
+        }, 300);
+    });
+
+    // Direct download button: open preview first instead of immediate download
+    document.getElementById('download-pdf').addEventListener('click', function () {
+        if (!CURRENT_EMP_ID) { alert('Please login first.'); return; }
+        setTodayDate();
+        requestQuotationNumber(function(err, data) {
+            if (err) { alert('Failed to generate quotation number. Please try again.'); return; }
+            if (data && data.quotation_no) {
+                var quoteNoSpan = document.getElementById('quote-number');
+                if (quoteNoSpan) quoteNoSpan.textContent = data.quotation_no;
+            }
+            // Build printable clone and show in overlay (same behavior as Preview)
+            var element = document.getElementById('pdf-content');
+            var printable = cloneForPrint(element);
+            var previewContent = document.getElementById('preview-content');
+            previewContent.innerHTML = '';
+            previewContent.appendChild(printable);
+            document.getElementById('preview-overlay').style.display = 'flex';
+            document.getElementById('preview-container').scrollTop = 0;
         });
     });
     </script>
