@@ -416,6 +416,12 @@
         @media print {
             body, html {
                 background: #fff !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            @page {
+                margin: 0 !important;
+                size: letter;
             }
             .no-print {
                 display: none !important;
@@ -898,8 +904,8 @@
         }, 300);
     });
 
-    // Direct download button: open preview first instead of immediate download
-    document.getElementById('download-pdf').addEventListener('click', function () {
+    // Direct print button: go directly to print dialog without preview
+    document.getElementById('preview-btn').addEventListener('click', function () {
         if (!CURRENT_EMP_ID) { alert('Please login first.'); return; }
         setTodayDate();
         requestQuotationNumber(function(err, data) {
@@ -908,16 +914,32 @@
                 var quoteNoSpan = document.getElementById('quote-number');
                 if (quoteNoSpan) quoteNoSpan.textContent = data.quotation_no;
             }
-            // Build printable clone and show in overlay (same behavior as Preview)
+            // Build printable clone and open print dialog directly
             var element = document.getElementById('pdf-content');
             var printable = cloneForPrint(element);
-            var previewContent = document.getElementById('preview-content');
-            previewContent.innerHTML = '';
-            previewContent.appendChild(printable);
-            document.getElementById('preview-overlay').style.display = 'flex';
-            document.getElementById('preview-container').scrollTop = 0;
+            var printWindow = window.open('', '_blank');
+            if (!printWindow) { alert('Popup blocked. Allow popups for this site to print.'); return; }
+            var headHTML = '';
+            Array.from(document.querySelectorAll('style, link[rel="stylesheet"]')).forEach(node => {
+                headHTML += node.outerHTML;
+            });
+            printWindow.document.open();
+            printWindow.document.write('<!doctype html><html><head>' + headHTML + '<title>Quotation</title></head><body>');
+            printWindow.document.write(printable.outerHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(function() {
+                printWindow.print();
+            }, 300);
         });
     });
+
+    // Remove the old download-pdf listener
+    var downloadBtn = document.getElementById('download-pdf');
+    if (downloadBtn) {
+        downloadBtn.parentNode.removeChild(downloadBtn);
+    }
     </script>
 </body>
 </html>
